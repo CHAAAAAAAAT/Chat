@@ -25,7 +25,7 @@ class ChatClientHandler extends Thread{
   
     public void run(){
 	try{
-	    open();//ソケットを開く		
+	    open();		
 	    System.out.println((String)getClientName() + " connected");
 	    while(true){
 		out.write(">  ");
@@ -105,6 +105,22 @@ class ChatClientHandler extends Thread{
     public void help() throws IOException{
 	this.send(": help  name whoami  bye  post users tell");
 	System.out.println(": help  name whoami  bye  post users tell" );
+    }
+
+    public void name(String name)throws IOException{
+	List names = new ArrayList();
+	for(int i = 0;i < clients.size();i++){
+	    ChatClientHandler handler = (ChatClientHandler)clients.get(i);
+	    names.add(handler.getClientName());
+	}
+
+	if(names.contains(name)){
+	    this.send("その名前は他の人に使われています.");
+	}else{
+	    this.name = name;
+	    this.send("名前を\"" + name + "\"に変更しました.");
+	}
+	System.out.println(": " + name);
     }
 
 }
