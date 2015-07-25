@@ -176,4 +176,61 @@ class ChatClientHandler extends Thread{
 	}
     }
 
+    public void tell(String name, String message) throws IOException{
+	List<String> names = new ArrayList<String>(); 
+	int receive_flag = 0;
+	for(int i = 0; i < clients.size(); i++){
+	    ChatClientHandler handler = (ChatClientHandler)clients.get(i);
+	    if((handler.getClientName().equals(name)) && !(handler.rejectList.contains(this))){
+		names.add(handler.getClientName());
+		handler.send("[" + this.getClientName() + "->" + handler.getClientName() + "]" + message);
+		receive_flag = 1;
+	    }else{
+		if((i == clients.size() - 1) && receive_flag == 0){
+		    this.send("no one receive message");
+		}
+	    }
+	}
+	Collections.sort(names);
+	String returnUsers = "";
+	int flag = 0;
+	for(int i = 0; i < names.size(); i++){
+	    if(flag == 0){
+		returnUsers = returnUsers + names.get(i);
+		flag = 1;
+	    }else{
+		returnUsers =  returnUsers + "," +names.get(i);
+	    }
+	}
+	this.send(returnUsers);
+    }
+
+    public void reject(String name) throws IOException{
+	for(int i = 0; i < clients.size(); i++){
+	    ChatClientHandler handler = (ChatClientHandler)clients.get(i);
+	    if(handler.getClientName().equals(name)){
+		if(rejectList.contains(handler)){
+		    rejectList.remove(handler);
+		}else{
+		    rejectList.add(handler);
+		}
+		return;
+	    }
+	}
+	this.send("ユーザが存在しません");
+	return;
+    }
+
+    public void reject() throws IOException{
+	String returnUsers = "";
+	int flag = 0;
+	for(int i = 0; i < rejectList.size(); i++){
+	    if(flag == 0){
+		returnUsers = returnUsers + rejectList.get(i).getClientName();
+	    }else{
+		returnUsers = returnUsers + "," +rejectList.get(i).getClientName();
+	    }
+	}
+	this.send(returnUsers);
+    }
 }
