@@ -153,4 +153,27 @@ class ChatClientHandler extends Thread{
 	 }	
      }
 
+    public void post(String message)throws IOException{
+	List names = new ArrayList();
+	for(int i = 0;i < clients.size();i++){
+	    ChatClientHandler handler = (ChatClientHandler)clients.get(i);
+	    if(handler != this){
+		names.add(handler.getClientName());
+		handler.send("[" + this.getClientName() + "] "+ message);
+	    }
+	}
+	Collections.sort(names);
+	String returnMessage = "";
+	for(int i = 0;i < names.size();i++){
+	    returnMessage = returnMessage + names.get(i) + ",";
+	}
+	if(returnMessage != ""){
+	    this.send(returnMessage);
+	    System.out.println(": "+ message);
+	}else{
+	    this.send("no one receive message");
+	    System.out.println(": no one receive message");
+	}
+    }
+
 }
