@@ -123,4 +123,8 @@ class ChatClientHandler extends Thread{
 	System.out.println(": " + name);
     }
 
+    public void whoami() throws IOException{
+	this.send(getClientName());
+    }
+
 }
