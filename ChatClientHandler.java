@@ -141,4 +141,16 @@ class ChatClientHandler extends Thread{
         this.send(returnMessage);
     }
 
+     public void bye() throws IOException{
+	 String object= (String)getClientName();
+	 this.send("bye " + (String)getClientName());
+	 System.out.println(": bye " + (String)getClientName());
+	 for(int i=0; i<clients.size(); i++){
+	     ChatClientHandler handler = (ChatClientHandler)clients.get(i);
+	     if(object.equals(handler.getClientName())){
+		 clients.remove(i)
+	     }
+	 }	
+     }
+
 }
