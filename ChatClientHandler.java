@@ -126,5 +126,19 @@ class ChatClientHandler extends Thread{
     public void whoami() throws IOException{
 	this.send(getClientName());
     }
+    
+    public void users() throws IOException{
+        List names = new ArrayList();
+        for(int i = 0; i < clients.size(); i++){
+            ChatClientHandler handler = (ChatClientHandler)clients.get(i);
+            names.add(handler.getClientName());
+        }
+        Collections.sort(names);
+        String returnMessage = "";
+        for(int i = 0; i < names.size(); i++) {
+            returnMessage = returnMessage + names.get(i) + ",";
+        }
+        this.send(returnMessage);
+    }
 
 }
